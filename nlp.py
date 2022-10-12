@@ -7,10 +7,6 @@ import string
 import nltk
 from nltk.corpus import stopwords
 
-# XGBoost <<< BLOATWERE
-import xgboost as xgb
-from xgboost import XGBClassifier
-
 # sklearn 
 from sklearn import model_selection
 from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer
@@ -27,11 +23,14 @@ import seaborn as sns
 # File system manangement
 import os
 
-# Suppress warnings 
-import warnings
-warnings.filterwarnings('ignore')
-
 #Training data
 train = pd.read_csv('songs.csv')
 print('Training data shape: ', train.shape)
 train.head()
+
+#Missing values in training set
+print(train.isnull().sum())
+
+print(train['Lyrics'].value_counts())
+
+sns.barplot(y=train['Lyrics'].value_counts()[:20].index,x=train['Lyrics'].value_counts()[:20], orient='h')
