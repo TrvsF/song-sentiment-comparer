@@ -1,8 +1,6 @@
 import dearpygui.dearpygui as dpg
 
-class Gui(object): # whats the object for?
-
-
+class Gui(object): 
     def __init__(self) -> None:
         print("starting gui")
 
@@ -19,7 +17,7 @@ class Gui(object): # whats the object for?
         dpg.start_dearpygui()
         dpg.destroy_context()
 
-    def search_clicked(self): # passing the self is stupid
+    def search_clicked(self):
         print("Save Clicked")
 
     def input_updated(self):
