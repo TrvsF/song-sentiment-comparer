@@ -6,16 +6,24 @@ key = keyjson["genius-access"]
 
 genius = Genius(key)
 
-songsearch = genius.search_songs("gee beach boy")
-with open('dict.txt', 'w') as file:
-     file.write(json.dumps(songsearch))
+search_term = input("search...")
 
-for hit in songsearch["hits"]:
+songsearch = genius.search_songs(search_term)
+hits = songsearch["hits"]
+
+c = 0
+for hit in hits:
     result = hit["result"]
-    print(result["title"])
-    print(result["artist_names"])
-    print("---")
+    print("{0} : {1} by {2}".format(c, result["title"], result["artist_names"]))
+    c += 1
 
+i = int(input("select input"))
+
+songtitle = hits[i]["result"]["title"]
+artistname = hits[i]["result"]["artist_names"]
+
+songobj = genius.search_song(songtitle, artist=artistname)
+print(songobj.lyrics)
 
 # artist = genius.search_artist("Ween", max_songs=3, sort="title")
 # print(artist.songs)
