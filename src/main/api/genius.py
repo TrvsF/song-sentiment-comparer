@@ -12,6 +12,21 @@ class GeniusAPI:
         key = keyjson["genius-access"]
         self.genius = Genius(key)
 
+    def get_lyrics_from_song(self, songtitle = "", artistname = "") -> str:
+        try:
+            searchresult = self.genius.search_song(songtitle, artist=artistname)
+        except HTTPError as e:
+            print(f"bad repsonce, code '{e.errno}' @get_lyrics_from_song")
+            return ""
+        except Timeout as t:
+            print(f"timed out @get_lyrics_from_song")
+            return ""
+
+        if searchresult == None:
+            return ""
+
+        return searchresult.lyrics
+
     def get_artistsong_obj_from_search(self, search_term = "") -> list:
         hits = self.get_hits_from_search(search_term)
         artistsongobj = self.get_artistsong_obj_from_hits(hits)
