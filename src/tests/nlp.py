@@ -23,14 +23,10 @@ import seaborn as sns
 # File system manangement
 import os
 
-#Training data
-train = pd.read_csv('songs.csv')
+train = pd.read_csv('all_lyrics.csv')
 print('Training data shape: ', train.shape)
 train.head()
 
-#Missing values in training set
-print(train.isnull().sum())
+print(train['lyrics'].value_counts())
 
-print(train['Lyrics'].value_counts())
-
-sns.barplot(y=train['Lyrics'].value_counts()[:20].index,x=train['Lyrics'].value_counts()[:20], orient='h')
+sns.barplot(y=train['lyrics'].value_counts()[:20].index,x=train['lyrics'].value_counts()[:20], orient='h')
