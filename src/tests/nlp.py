@@ -23,7 +23,7 @@ import seaborn as sns
 # File system manangement
 import os
 
-train = pd.read_csv('all_lyrics.csv')
+train = pd.read_csv('datasets/all_lyrics.csv')
 print('Training data shape: ', train.shape)
 train.head()
 
