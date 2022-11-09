@@ -12,7 +12,7 @@ class GeniusAPI:
         key = keyjson["genius-access"]
         self.genius = Genius(key)
 
-    def get_lyrics_from_song(self, songtitle = "", artistname = "") -> str:
+    def get_lyrics_from_song(self, songtitle : str, artistname : str) -> str:
         try:
             searchresult = self.genius.search_song(songtitle, artist=artistname)
         except HTTPError as e:
@@ -27,7 +27,7 @@ class GeniusAPI:
 
         return searchresult.lyrics
 
-    def get_artistsong_obj_from_search(self, search_term = "") -> list:
+    def get_artistsong_obj_from_search(self, search_term : str) -> list[dict]:
         hits = self.get_hits_from_search(search_term)
         artistsongobj = self.get_artistsong_obj_from_hits(hits)
         return artistsongobj
@@ -47,7 +47,7 @@ class GeniusAPI:
         else:
             return []
 
-    def get_artistsong_obj_from_hits(self, hits_obj = None) -> list:
+    def get_artistsong_obj_from_hits(self, hits_obj) -> list[dict]:
         if hits_obj == None:
             return []
 

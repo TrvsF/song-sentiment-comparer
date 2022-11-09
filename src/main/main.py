@@ -10,6 +10,9 @@ def main() -> None:
     artistsongobj = api.get_artistsong_obj_from_search(searchinput)[0]
     lyrics = api.get_lyrics_from_song(songtitle=artistsongobj["title"], artistname=artistsongobj["artist"])
 
+    with open(f"{lyrics[:5]}.txt", "w", encoding="utf-8") as file:
+        file.write(lyrics)
+
     print(f"{lyrics}")    
 
 if __name__ == "__main__":
