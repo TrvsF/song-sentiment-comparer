@@ -14,7 +14,17 @@ class Search(tk.Tk):
         self.entry = tk.Entry(self, justify="center", width=52)
         self.entry.pack(fill=tk.NONE)
 
+        self.search = tk.Button(self, text="search", command=self.search)
+        self.search.pack(fill=tk.NONE)
+
+        self.output = tk.Label(self, text="aaa", font=(None, 14))
+        self.output.pack(fill=tk.NONE, pady=(60, 12))
+
         self.colour_schemes = [{"bg": "lightgrey", "fg": "black"}, {"bg": "grey", "fg": "white"}]
+
+    def search(self) -> None:
+        txt = self.entry.get()
+        self.output["text"] = txt
 
 if __name__ == "__main__":
     root = Search()
