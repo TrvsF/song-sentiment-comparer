@@ -1,8 +1,13 @@
-import tkinter as tk
+#!/usr/bin/env python3
 
-class Search(tk.Tk):
-    def __init__(self) -> None:
+import tkinter as tk
+from api.genius import GeniusAPI
+
+class Gui(tk.Tk):
+    def __init__(self, api_obj : GeniusAPI) -> None:
         super().__init__()
+
+        self.geniusapi = api_obj
 
         self.title("SSC")
         self.geometry("600x400")
@@ -17,17 +22,20 @@ class Search(tk.Tk):
         self.search = tk.Button(self, text="search", command=self.search)
         self.search.pack(fill=tk.NONE)
 
-        self.output = tk.Label(self, text="aaa", font=(None, 14))
+        self.output = tk.Label(self, text="", font=(None, 14))
         self.output.pack(fill=tk.NONE, pady=(60, 12))
 
         self.colour_schemes = [{"bg": "lightgrey", "fg": "black"}, {"bg": "grey", "fg": "white"}]
 
     def search(self) -> None:
-        txt = self.entry.get()
-        self.output["text"] = txt
+        searchinput = self.entry.get()
+        artistsongobj = self.geniusapi.get_artistsong_obj_from_search(searchinput)[0]
+        lyrics = self.geniusapi.get_lyrics_from_song(songtitle=artistsongobj["title"], artistname=artistsongobj["artist"])
+
+        self.output["text"] = lyrics
 
 if __name__ == "__main__":
-    root = Search()
+    root = Gui()
     root.mainloop()
-    
+
 # https://raw.githubusercontent.com/Dvlv/Tkinter-By-Example/master/Tkinter-By-Example.pdf
