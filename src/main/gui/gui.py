@@ -94,10 +94,16 @@ class Gui(tk.Tk):
         # binds
         self.bind("<Return>", lambda event: self.search(event, searchtext=self.search_bar.get()))
         self.bind("<Alt_L>", lambda event: self.getsuggested(event, searchtext=self.search_bar.get()))
-        # for each recommended
+        # for each recommended, cant do this in a for loop :((
         self.recommended_one.bind("<Button-1>", lambda event: self.search(event, searchtext=self.recommended_one["text"]))
+        self.recommended_one.bind("<Enter>",  func=lambda e: self.recommended_one.config(bg="grey"))
+        self.recommended_one.bind("<Leave>",  func=lambda e: self.recommended_one.config(bg="white"))
         self.recommended_two.bind("<Button-1>", lambda event: self.search(event, searchtext=self.recommended_two["text"]))
+        self.recommended_two.bind("<Enter>",  func=lambda e: self.recommended_two.config(bg="grey"))
+        self.recommended_two.bind("<Leave>",  func=lambda e: self.recommended_two.config(bg="white"))
         self.recommended_thr.bind("<Button-1>", lambda event: self.search(event, searchtext=self.recommended_thr["text"]))
+        self.recommended_thr.bind("<Enter>",  func=lambda e: self.recommended_thr.config(bg="grey"))
+        self.recommended_thr.bind("<Leave>",  func=lambda e: self.recommended_thr.config(bg="white"))
 
         # focus search bar
         self.search_bar.focus()
