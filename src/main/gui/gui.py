@@ -74,7 +74,7 @@ class Gui(tk.Tk):
             fg = "black",
             font = self.default_font
         )
-
+        # assign list for recommended labels
         self.recommended_list = [
             self.recommended_one,
             self.recommended_two,
@@ -85,10 +85,8 @@ class Gui(tk.Tk):
         self.menu_frame.pack(fill=tk.BOTH, expand=1)
         self.title.pack(fill=tk.X, pady=(32, 28))
         self.search_bar.pack(fill=tk.NONE, pady=(2, 0))
-
         for label in self.recommended_list:
             label.pack(fill=tk.NONE)
-
         self.output_box.pack(fill=tk.BOTH, pady=(22, 12))
 
         # binds
@@ -109,22 +107,22 @@ class Gui(tk.Tk):
         self.search_bar.focus()
 
     def getsuggested(self, event = None, searchtext = "") -> None:
+        # update each recommended label with genius suggestion
         for i, artistsongobj in enumerate(self.genius_api.get_artistsong_obj_from_search(searchtext, size_limit=3)):
             self.recommended_list[i]["text"] = f"{artistsongobj['title']} - {artistsongobj['artist']}"
+        # update tkinter bc it gets confused
         self.update()
 
     def search(self, event = None, searchtext = "") -> None:
-        artistsongobj = None
-
-        # searchinput = self.search_bar.get() if searchtext == "" else searchtext
+        # get artistsongobj from search
         artistsongobj = self.genius_api.get_artistsong_obj_from_search(searchtext)[0]
-
-        if artistsongobj == None:
-            print("artist obj was none")
+        # if cannot find any results
+        if artistsongobj == []:
+            print("cannot find any songs")
             return None
-
+            
+        # get lyrics, cleanup, & output in label
         lyrics = self.genius_api.get_lyrics_from_song(songtitle=artistsongobj["title"], artistname=artistsongobj["artist"])
-
         self.output_box["text"] = reutil.clean_lyrics(lyrics) if lyrics != "" else "timed out"
 
     def safe_destroy(self) -> None:

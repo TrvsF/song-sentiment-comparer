@@ -7,7 +7,7 @@ import json
 class GeniusAPI:
     def __init__(self) -> None:
         super().__init__()
-
+        
         keyjson = json.load(
             open("api/keys.json", "r")
         )
