@@ -29,10 +29,10 @@ class GeniusAPI:
 
         return searchresult.lyrics
 
-    def get_artistsong_obj_from_search(self, search_term : str) -> list[dict]:
+    def get_artistsong_obj_from_search(self, search_term : str, size_limit = 5) -> list[dict]:
         hits = self.get_hits_from_search(search_term)
         artistsongobj = self.get_artistsong_obj_from_hits(hits)
-        return artistsongobj
+        return artistsongobj[:size_limit]
 
     def get_hits_from_search(self, search_term = "") -> list:
         try:

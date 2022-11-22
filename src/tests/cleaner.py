@@ -20,6 +20,6 @@ lyrics = re.sub(r"[\d]*(?=Embed)\w*", "", lyrics)
 lyrics = re.sub(r"\[.*?\]", "", lyrics)
 
 # clean newlines
-lyrics = re.sub(r"^\n", "", lyrics) # << TODO : only does first line?!??
+lyrics = re.sub(r"(?<=\n)\s+", "", lyrics)
 
 print(lyrics)
