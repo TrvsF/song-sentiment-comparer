@@ -45,7 +45,7 @@ class Gui(tk.Tk):
             font = self.default_font
         )
         self.recommended_one = tk.Label(self.menu_frame,
-            text="ween bananas and blow",
+            text="ween - bananas and blow",
             bg = "white",
             fg = "black",
             width = 52,
@@ -53,7 +53,7 @@ class Gui(tk.Tk):
             font = self.default_font
         )
         self.recommended_two = tk.Label(self.menu_frame,
-            text="talking heads im not in love",
+            text="talking heads - im not in love",
             bg = "white",
             fg = "black",
             width = 52,
@@ -61,7 +61,7 @@ class Gui(tk.Tk):
             font = self.default_font
         )
         self.recommended_thr = tk.Label(self.menu_frame,
-            text="travis side",
+            text="travis - side",
             bg = "white",
             fg = "black",
             width = 52,
@@ -69,7 +69,7 @@ class Gui(tk.Tk):
             font = self.default_font
         )
         self.output_box = tk.Label(self.menu_frame,
-            text = "this is an output\nyipeeee",
+            text = "input a song to find more like it\npress 'alt' to autocompleate",
             bg = "lightgrey",
             fg = "black",
             font = self.default_font

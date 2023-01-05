@@ -15,7 +15,7 @@ def clean_lyrics(lyrics : str) -> str:
     # remove '[]'s
     lyrics = re.sub(r"\[.*?\]", "", lyrics)
 
-    # clean newlines
+    # clean empty newlines
     lyrics = re.sub(r"(?<=\n)\s+", "", lyrics)
 
     return lyrics
