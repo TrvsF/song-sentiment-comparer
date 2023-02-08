@@ -1,6 +1,8 @@
 # IMPORTANT
 **/keys*
 
+/data
+
 /tmp
 
 # Byte-compiled / optimized / DLL files

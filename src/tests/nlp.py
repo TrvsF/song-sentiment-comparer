@@ -1,32 +1,24 @@
-import numpy as np 
-import pandas as pd 
+from transformers import AutoModelForMaskedLM
+from transformers import AutoTokenizer
 
-# text processing libraries
-import re
-import string
-import nltk
-from nltk.corpus import stopwords
+import torch
 
-# sklearn 
-from sklearn import model_selection
-from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import f1_score
-from sklearn import preprocessing, decomposition, model_selection, metrics, pipeline
-from sklearn.model_selection import GridSearchCV,StratifiedKFold,RandomizedSearchCV
+model_checkpoint = "bert-base-uncased"
+model = AutoModelForMaskedLM.from_pretrained(model_checkpoint)
 
-# matplotlib and seaborn for plotting
-import matplotlib.pyplot as plt
-import seaborn as sns
+distilbert_num_parameters = model.num_parameters() / 1_000_000
+print(f"DistilBERT number of parameters: {round(distilbert_num_parameters)}M")
 
-# File system manangement
-import os
+text = "the best video game is [MASK]."
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 
-train = pd.read_csv('datasets/all_lyrics.csv')
-print('Training data shape: ', train.shape)
-train.head()
+inputs = tokenizer(text, return_tensors="pt")
+token_logits = model(**inputs).logits
+# Find the location of [MASK] and extract its logits
+mask_token_index = torch.where(inputs["input_ids"] == tokenizer.mask_token_id)[1]
+mask_token_logits = token_logits[0, mask_token_index, :]
+# Pick the [MASK] candidates with the highest logits
+top_5_tokens = torch.topk(mask_token_logits, 5, dim=1).indices[0].tolist()
 
-print(train['lyrics'].value_counts())
-
-sns.barplot(y=train['lyrics'].value_counts()[:20].index,x=train['lyrics'].value_counts()[:20], orient='h')
+for token in top_5_tokens:
+    print(f"{text.replace(tokenizer.mask_token, tokenizer.decode([token]))}")
