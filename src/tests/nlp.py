@@ -1,5 +1,6 @@
 from transformers import AutoModelForMaskedLM
 from transformers import AutoTokenizer
+from datasets import load_dataset
 
 import torch
 
@@ -22,3 +23,6 @@ top_5_tokens = torch.topk(mask_token_logits, 5, dim=1).indices[0].tolist()
 
 for token in top_5_tokens:
     print(f"{text.replace(tokenizer.mask_token, tokenizer.decode([token]))}")
+
+imdb_dataset = load_dataset("imdb")
+imdb_dataset
