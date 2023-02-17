@@ -24,5 +24,8 @@ top_5_tokens = torch.topk(mask_token_logits, 5, dim=1).indices[0].tolist()
 for token in top_5_tokens:
     print(f"{text.replace(tokenizer.mask_token, tokenizer.decode([token]))}")
 
-imdb_dataset = load_dataset("imdb")
-imdb_dataset
+lyrics_dataset = load_dataset("csv", data_files="data/dataset.csv")
+sample = lyrics_dataset["train"].shuffle(seed=42).select(range(3))
+
+for row in sample:
+    print(f"\n'>>> lyrics: {row['lyrics']}'")
