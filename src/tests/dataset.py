@@ -1,7 +1,9 @@
 import csv
+import functools
 
 reader = csv.DictReader(open('data/id_lang.csv', 'r', encoding='utf-8'), delimiter='\t', quoting=csv.QUOTE_NONE)
 
+@functools.lru_cache
 def get_filetxt(filename):
     with open(f'data/lyrics/{filename}.txt', 'r', encoding='utf-8') as file:
         txt = file.read().replace('\n', ' ')
@@ -17,7 +19,7 @@ for item in reader:
         dictlist.append(item)
         c+=1
 
-    if (c == 3000):
+    if (c == 25000):
         break
 
 keys = dictlist[0].keys()
