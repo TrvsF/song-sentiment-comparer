@@ -8,30 +8,13 @@ model_checkpoint = "bert-base-uncased"
 model = AutoModelForMaskedLM.from_pretrained(model_checkpoint)
 
 distilbert_num_parameters = model.num_parameters() / 1_000_000
-print(f"DistilBERT number of parameters: {round(distilbert_num_parameters)}M")
+print(f"baes dataset parameters: {round(distilbert_num_parameters)}M")
 
-text = "the best video game is [MASK]."
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 
-inputs = tokenizer(text, return_tensors="pt")
-token_logits = model(**inputs).logits
-# Find the location of [MASK] and extract its logits
-mask_token_index = torch.where(inputs["input_ids"] == tokenizer.mask_token_id)[1]
-mask_token_logits = token_logits[0, mask_token_index, :]
-# Pick the [MASK] candidates with the highest logits
-top_5_tokens = torch.topk(mask_token_logits, 5, dim=1).indices[0].tolist()
-
-for token in top_5_tokens:
-    print(f"{text.replace(tokenizer.mask_token, tokenizer.decode([token]))}")
-
-lyrics_dataset_obj = load_dataset("csv", data_files="data/dataset.csv")
+lyrics_dataset_obj = load_dataset("csv", data_files="data/dataset-full.csv")
 lyrics_dataset = lyrics_dataset_obj["train"].train_test_split(test_size=0.2)
 print(lyrics_dataset)
-
-sample = lyrics_dataset["train"].shuffle(seed=42).select(range(3))
-
-for row in sample:
-    print(f"\n'>>> lyrics: {row['lyrics']}'")
 
 
 def tokenize_function(examples):
@@ -49,14 +32,11 @@ print(tokenized_datasets)
 chunk_size = 128
 tokenized_samples = tokenized_datasets["train"][:3]
 
-for idx, sample in enumerate(tokenized_samples["input_ids"]):
-    print(f"'>>> Review {idx} length: {len(sample)}'")
-
 concatenated_examples = {
     k: sum(tokenized_samples[k], []) for k in tokenized_samples.keys()
 }
 total_length = len(concatenated_examples["input_ids"])
-print(f"'>>> Concatenated reviews length: {total_length}'")
+print(f"'>>> Concatenated lyrics length: {total_length}'")
 
 chunks = {
     k: [t[i : i + chunk_size] for i in range(0, total_length, chunk_size)]
@@ -84,3 +64,5 @@ def group_texts(examples):
 
 lm_datasets = tokenized_datasets.map(group_texts, batched=True)
 print(lm_datasets)
+print(tokenizer.decode(lm_datasets["train"][1]["input_ids"]))
+print(tokenizer.decode(lm_datasets["train"][1]["labels"]))
