@@ -10,17 +10,12 @@ def get_filetxt(filename):
         return txt
 
 dictlist = []
-c = 0
-
 for item in reader:
     if (item['lang'] == 'en'):
-        lyrics = get_filetxt(item['id']).replace('"', '')
+        lyrics = get_filetxt(item['id'])
+        lyrics = lyrics.replace('"', '')
         item['lyrics'] = lyrics
         dictlist.append(item)
-        c+=1
-
-    if (c == 25000):
-        break
 
 keys = dictlist[0].keys()
 with open('dataset.csv', 'w', newline='', encoding='utf-8') as output_file:
