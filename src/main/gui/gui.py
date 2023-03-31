@@ -113,17 +113,23 @@ class Gui(tk.Tk):
         # update tkinter bc it gets confused
         self.update()
 
-    def search(self, event = None, searchtext = "") -> None:
+    def search(self, event = None, searchtext = "", trycount = 0) -> None:
+        # check try count
+        if trycount > 5:
+            self.output_box["text"] = "error finding search from genus"
+            return
         # get artistsongobj from search
         artistsongobj = self.genius_api.get_artistsong_obj_from_search(searchtext)[0]
         # if cannot find any results
         if artistsongobj == []:
             print("cannot find any songs")
             return None
-            
         # get lyrics, cleanup, & output in label
         lyrics = self.genius_api.get_lyrics_from_song(songtitle=artistsongobj["title"], artistname=artistsongobj["artist"])
-        self.output_box["text"] = reutil.clean_lyrics(lyrics) if lyrics != "" else "timed out"
+        self.output_box["text"] = reutil.clean_lyrics(lyrics) if lyrics != "" else f"timed out, retrying ({trycount}/5)"
+        # retry if timed out
+        if lyrics == "":
+            self.search(searchtext, trycount + 1)
 
     def safe_destroy(self) -> None:
         # check if model is running & stop
