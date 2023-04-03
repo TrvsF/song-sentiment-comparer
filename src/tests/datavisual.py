@@ -1,13 +1,15 @@
 import csv
+import nltk
 import string
 import matplotlib.pyplot as plt
 
-from textblob import TextBlob
-from numpy import random
+from textblob            import TextBlob
+from textblob.sentiments import NaiveBayesAnalyzer
+from numpy               import random
 
 plt.rcParams.update({'font.size': 7})
 
-MAXCOUNT = 6000
+MAXCOUNT = 5000
 
 def get_genres():
     genrecount = {}
@@ -61,20 +63,35 @@ def get_wordcount():
     return wordcount
 
 def get_random_sample():
-    words = []
+    sents = []
     c = 0
     reader = csv.reader(open('data/dataset-full.csv', 'r', encoding='utf-8'), delimiter=',', quoting=csv.QUOTE_NONE)
     readerlist = list(reader)
     while (c < MAXCOUNT):
         i = random.randint(2, len(readerlist))
-        # print(readerlist[i][2])
         tag = readerlist[i][2]
         tag = tag.lower()
         tag = tag.translate(str.maketrans('', '', string.punctuation))
-        words.append(tag)
+        sents.append(tag)
         c += 1
 
-    return words
+    return sents
+
+def get_random_sample_id():
+    sents = {}
+    c = 0
+    reader = csv.reader(open('data/dataset-full.csv', 'r', encoding='utf-8'), delimiter=',', quoting=csv.QUOTE_NONE)
+    readerlist = list(reader)
+    while (c < MAXCOUNT):
+        i = random.randint(2, len(readerlist))
+        id = readerlist[i][0]
+        tag = readerlist[i][2]
+        tag = tag.lower()
+        tag = tag.translate(str.maketrans('', '', string.punctuation))
+        sents[id] = tag
+        c += 1
+
+    return sents
 
 def draw_data(d, r = 10):
     listkeys = list(d.keys())[-r:]
@@ -84,8 +101,30 @@ def draw_data(d, r = 10):
     plt.xticks(range(r), listkeys)
     plt.show()
 
+sentlist = get_random_sample_id()
+sentilist = []
+for id, sent in sentlist.items():
+    sentiment = TextBlob(sent)
+    polarity = sentiment.sentiment.polarity
+    subjectivity = sentiment.sentiment.subjectivity
+
+    sent          = TextBlob(sent, analyzer = NaiveBayesAnalyzer())
+    classification= sent.sentiment.classification
+    positive      = sent.sentiment.p_pos
+    negative      = sent.sentiment.p_neg
+    
+    print(polarity,subjectivity,classification,positive,negative)
+    sentilist.append([id, classification, positive, negative, sent])
+
+with open('sentiment.csv', 'w', newline='', encoding='utf-8') as output_file:
+    writer = csv.writer(output_file)
+    writer.writerow(["id", "classification", "positive", "negative", "lyrics"])
+    for row in sentilist:
+        writer.writerow(row)
+
+'''
 # get nouns
-wordlist   = get_random_sample()
+wordlist = get_random_sample()
 wordstr  = " ".join(word for word in wordlist)
 
 blob = TextBlob(wordstr)
@@ -93,7 +132,4 @@ dict = blob.np_counts
 sorteddict = { key:val for key, val in sorted(dict.items(), key=lambda item: item[1]) }
 print(sorteddict)
 draw_data(sorteddict)
-
-# # culleddict = { key:val for key, val in genrecount.items() if val > 5 }
-# sorteddict = { key:val for key, val in sorted(get_wordcount().items(), key=lambda item: item[1]) }
-
+'''
