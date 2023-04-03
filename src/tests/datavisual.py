@@ -9,7 +9,7 @@ from numpy               import random
 
 plt.rcParams.update({'font.size': 7})
 
-MAXCOUNT = 5000
+MAXCOUNT = 20000
 
 def get_genres():
     genrecount = {}
