@@ -123,6 +123,7 @@ class Gui(tk.Tk):
         # if cannot find any results
         if artistsongobj == []:
             print("cannot find any songs")
+            self.output_box["text"] = "cannot find any songs from search"
             return None
         # get lyrics, cleanup, & output in label
         lyrics = self.genius_api.get_lyrics_from_song(songtitle=artistsongobj["title"], artistname=artistsongobj["artist"])
