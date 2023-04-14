@@ -1,15 +1,12 @@
 import csv
-import nltk
 import string
 import matplotlib.pyplot as plt
 
-from textblob            import TextBlob
-from textblob.sentiments import NaiveBayesAnalyzer
 from numpy               import random
 
 plt.rcParams.update({'font.size': 7})
 
-MAXCOUNT = 20000
+MAXCOUNT = 1000
 
 def get_genres():
     genrecount = {}
@@ -100,36 +97,3 @@ def draw_data(d, r = 10):
     plt.bar(range(r), listvalues, align='center')
     plt.xticks(range(r), listkeys)
     plt.show()
-
-sentlist = get_random_sample_id()
-sentilist = []
-for id, sent in sentlist.items():
-    sentiment = TextBlob(sent)
-    polarity = sentiment.sentiment.polarity
-    subjectivity = sentiment.sentiment.subjectivity
-
-    sent          = TextBlob(sent, analyzer = NaiveBayesAnalyzer())
-    classification= sent.sentiment.classification
-    positive      = sent.sentiment.p_pos
-    negative      = sent.sentiment.p_neg
-    
-    print(polarity,subjectivity,classification,positive,negative)
-    sentilist.append([id, classification, positive, negative, sent])
-
-with open('sentiment.csv', 'w', newline='', encoding='utf-8') as output_file:
-    writer = csv.writer(output_file)
-    writer.writerow(["id", "classification", "positive", "negative", "lyrics"])
-    for row in sentilist:
-        writer.writerow(row)
-
-'''
-# get nouns
-wordlist = get_random_sample()
-wordstr  = " ".join(word for word in wordlist)
-
-blob = TextBlob(wordstr)
-dict = blob.np_counts
-sorteddict = { key:val for key, val in sorted(dict.items(), key=lambda item: item[1]) }
-print(sorteddict)
-draw_data(sorteddict)
-'''

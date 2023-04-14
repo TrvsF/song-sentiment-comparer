@@ -2,8 +2,6 @@ from transformers import AutoModelForMaskedLM
 from transformers import AutoTokenizer
 from datasets import load_dataset
 
-import torch
-
 model_checkpoint = "bert-base-uncased"
 model = AutoModelForMaskedLM.from_pretrained(model_checkpoint)
 
@@ -15,7 +13,6 @@ tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 lyrics_dataset_obj = load_dataset("csv", data_files="data/dataset-full.csv")
 lyrics_dataset = lyrics_dataset_obj["train"].train_test_split(test_size=0.2)
 print(lyrics_dataset)
-
 
 def tokenize_function(examples):
     result = tokenizer(examples["lyrics"])
