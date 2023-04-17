@@ -1,4 +1,4 @@
-from datavisualiser      import get_random_sample_id
+from datavisualiser      import get_lyric_id_pairs
 from textblob            import TextBlob
 from textblob            import Blobber
 from textblob.sentiments import NaiveBayesAnalyzer
@@ -6,12 +6,12 @@ from textblob.sentiments import NaiveBayesAnalyzer
 import csv
 
 def main() -> None:
-    sentlist = get_random_sample_id()
+    sentdict = get_lyric_id_pairs()
     sentilist = []
     tb = Blobber(analyzer = NaiveBayesAnalyzer())
-    for id, sent in sentlist.items():
-        sentiment = TextBlob(sent)
-        polarity = sentiment.sentiment.polarity
+    for id, sent in sentdict.items():
+        sentiment    = TextBlob(sent)
+        polarity     = sentiment.sentiment.polarity
         subjectivity = sentiment.sentiment.subjectivity
 
         sent          = tb(sent)
@@ -19,7 +19,6 @@ def main() -> None:
         positive      = sent.sentiment.p_pos
         negative      = sent.sentiment.p_neg
         
-        print(polarity,subjectivity,classification,positive,negative)
         sentilist.append([id, classification, positive, negative, sent])
 
     with open('data/sentiment.csv', 'w', newline='', encoding='utf-8') as output_file:

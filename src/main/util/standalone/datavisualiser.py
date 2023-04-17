@@ -6,7 +6,7 @@ from numpy               import random
 
 plt.rcParams.update({'font.size': 7})
 
-MAXCOUNT = 1000
+MAXCOUNT = 50000
 
 def get_genres():
     genrecount = {}
@@ -58,6 +58,17 @@ def get_wordcount():
             break
 
     return wordcount
+
+def get_lyric_id_pairs():
+    sents = {}
+    reader = csv.DictReader(open('data/dataset-full.csv', 'r', encoding='utf-8'), delimiter=',', quoting=csv.QUOTE_NONE)
+    for item in reader:
+        lyrics = item["lyrics"]
+        lyrics = lyrics.lower()
+        lyrics = lyrics.translate(str.maketrans('', '', string.punctuation))
+        id = item["id"]
+        sents[id] = lyrics
+    return sents
 
 def get_random_sample():
     sents = []
