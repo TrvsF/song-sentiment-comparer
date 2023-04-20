@@ -101,10 +101,29 @@ def get_random_sample_id():
 
     return sents
 
-def draw_data(d, r = 10):
+def get_sentiment_dict():
+    sentimentcount = {"pos" : 0, "neg" : 0}
+    reader = csv.DictReader(open('data/sentiment.csv', 'r', encoding='utf-8'), delimiter=',', quoting=csv.QUOTE_NONE)
+    for item in reader:
+        tag = item["classification"]
+        sentimentcount[tag] += 1
+        
+    return sentimentcount
+
+def draw_data_pie(d):
+    listkeys = list(d.keys())
+    listvalues = list(d.values())
+
+    fig, ax = plt.subplots()
+    ax.pie(listvalues, labels=listkeys, autopct='%1.1f%%')
+    plt.show()
+
+def draw_data_bar(d, r = 10):
     listkeys = list(d.keys())[-r:]
     listvalues = list(d.values())[-r:]
 
     plt.bar(range(r), listvalues, align='center')
     plt.xticks(range(r), listkeys)
     plt.show()
+
+draw_data_pie(get_sentiment_dict())
