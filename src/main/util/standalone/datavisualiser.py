@@ -126,4 +126,4 @@ def draw_data_bar(d, r = 10):
     plt.xticks(range(r), listkeys)
     plt.show()
 
-draw_data_pie(get_sentiment_dict())
+# draw_data_pie(get_sentiment_dict())

@@ -2,7 +2,8 @@
 **/keys*
 
 /data
-
+/ssc
+/ssc-old
 /tmp
 
 # Byte-compiled / optimized / DLL files
