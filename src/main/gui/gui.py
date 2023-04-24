@@ -120,22 +120,27 @@ class Gui(tk.Tk):
             self.output_box["text"] = "error finding search from genus"
             return
         # get artistsongobj from search
-        self.search_bar.setvar(searchtext)
         artistsongobj = self.genius_api.get_artistsong_obj_from_search(searchtext)[0]
         # if cannot find any results
         if artistsongobj == []:
             print("cannot find any songs")
             self.output_box["text"] = "cannot find any songs from search"
             return None
-        # get lyrics, cleanup, & output in label
-        lyrics = self.genius_api.get_lyrics_from_song(songtitle=artistsongobj["title"], artistname=artistsongobj["artist"])
-        CleanLyrics = reutil.CleanLyrics(lyrics)
-        sentiment_txt = GetSentiment(CleanLyrics, True)
-        self.output_box["text"] = sentiment_txt
-        # self.output_box["text"] = reutil.CleanLyrics(lyrics) if lyrics != "" else f"timed out, retrying ({trycount}/5)"
+        # set object var names
+        title  = artistsongobj["title"]
+        artist = artistsongobj["artist"]
+        # set searchbar to text
+        self.search_bar.delete(0, tk.END)
+        self.search_bar.insert(0, f"{artist} - {title}")
+        # get lyrics
+        lyrics = self.genius_api.get_lyrics_from_song(songtitle=title, artistname=artist)
         # retry if timed out
         if lyrics == "":
             self.search(searchtext, trycount + 1)
+        # cleanup, & output as label
+        CleanLyrics = reutil.CleanLyrics(lyrics)
+        sentiment_txt = GetSentiment(CleanLyrics, True)
+        self.output_box["text"] = sentiment_txt
 
     def safe_destroy(self) -> None:
         # check if model is running & stop
