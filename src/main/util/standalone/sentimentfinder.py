@@ -21,19 +21,22 @@ def main() -> None:
 
         sent          = tb(lyrics)
         classification= sent.sentiment.classification
-        positive      = sent.sentiment.p_pos
-        negative      = sent.sentiment.p_neg
+        # positive      = sent.sentiment.p_pos
+        # negative      = sent.sentiment.p_neg
 
-        classification = 1 if sent.sentiment.classification == "pos" else 0
+        if not lyrics or lyrics == "":
+            continue 
 
-        if (not isEnglish(lyrics)):
+        if not isEnglish(lyrics):
             continue
 
-        sentilist.append([lyrics, classification])
+        classification_id = 1 if classification == "pos" else 0
+
+        sentilist.append([lyrics, classification_id])
 
     with open('data/sentiment.csv', 'w', newline='', encoding='utf-8') as output_file:
         writer = csv.writer(output_file)
-        writer.writerow(["lyrics", "label"])
+        writer.writerow(["text", "label"])
         for row in sentilist:
             writer.writerow(row)
 

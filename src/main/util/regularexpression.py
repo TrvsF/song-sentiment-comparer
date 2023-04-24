@@ -2,7 +2,7 @@
 
 import re
 
-def clean_lyrics(lyrics : str) -> str:
+def CleanLyrics(lyrics : str) -> str:
     # remove string seemingly random inserted into some lyric pulls
     lyrics = lyrics.replace("You might also like", "")
 
@@ -18,4 +18,4 @@ def clean_lyrics(lyrics : str) -> str:
     # clean empty newlines
     lyrics = re.sub(r"(?<=\n)\s+", "", lyrics)
 
-    return lyrics
+    return lyrics[:75]

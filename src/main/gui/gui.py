@@ -4,6 +4,7 @@ import tkinter as tk
 import util.regularexpression as reutil
 
 from api.genius import GeniusAPI
+from util.themodel import GetSentiment
 
 class Gui(tk.Tk):
     def __init__(self, apiobject : GeniusAPI) -> None:
@@ -119,6 +120,7 @@ class Gui(tk.Tk):
             self.output_box["text"] = "error finding search from genus"
             return
         # get artistsongobj from search
+        self.search_bar.setvar(searchtext)
         artistsongobj = self.genius_api.get_artistsong_obj_from_search(searchtext)[0]
         # if cannot find any results
         if artistsongobj == []:
@@ -127,7 +129,10 @@ class Gui(tk.Tk):
             return None
         # get lyrics, cleanup, & output in label
         lyrics = self.genius_api.get_lyrics_from_song(songtitle=artistsongobj["title"], artistname=artistsongobj["artist"])
-        self.output_box["text"] = reutil.clean_lyrics(lyrics) if lyrics != "" else f"timed out, retrying ({trycount}/5)"
+        CleanLyrics = reutil.CleanLyrics(lyrics)
+        sentiment_txt = GetSentiment(CleanLyrics, True)
+        self.output_box["text"] = sentiment_txt
+        # self.output_box["text"] = reutil.CleanLyrics(lyrics) if lyrics != "" else f"timed out, retrying ({trycount}/5)"
         # retry if timed out
         if lyrics == "":
             self.search(searchtext, trycount + 1)

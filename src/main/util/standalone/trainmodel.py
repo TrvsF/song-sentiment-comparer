@@ -7,30 +7,20 @@ import numpy as np
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 
 sentiment_dataset_obj = load_dataset("csv", data_files="data/sentiment.csv")
-sentiment_model       = sentiment_dataset_obj["train"].train_test_split(test_size=0.2)
+sentiment_data        = sentiment_dataset_obj["train"].train_test_split(test_size=0.2)
 
-sentiment_train = sentiment_model["train"].shuffle(seed=42).select([i for i in list(range(3000))])
-sentiment_test  = sentiment_model["test"].shuffle(seed=42).select([i for i in list(range(300))])
+sentiment_train = sentiment_data["train"].shuffle(seed=42)
+sentiment_test  = sentiment_data["test"].shuffle(seed=42)
+train_len = len(sentiment_train)
+test_len = len(sentiment_test)
 
-imdb = load_dataset("imdb")
-small_train_dataset = imdb["train"].shuffle(seed=42).select([i for i in list(range(3000))])
-small_test_dataset = imdb["test"].shuffle(seed=42).select([i for i in list(range(300))])
-print(small_train_dataset[0])
-print(sentiment_train[0])
+print(f"processing with sizes [{train_len}:{test_len}]")
 
 def preprocess_function(examples):
    return tokenizer(examples["text"], truncation=True)
 
 tokenized_train = sentiment_train.map(preprocess_function, batched=True)
 tokenized_test  = sentiment_test.map(preprocess_function, batched=True)
-
-# train_dataframe = DataFrame(sentiment_train).dropna()
-# train_list      = train_dataframe["lyrics"].tolist()
-# tokenized_train = tokenizer(train_list) 
-
-# test_dataframe = DataFrame(sentiment_test).dropna()
-# test_list      = test_dataframe["lyrics"].tolist()
-# tokenized_test = tokenizer(train_list) 
 
 data_collector = DataCollatorWithPadding(tokenizer=tokenizer)
 
