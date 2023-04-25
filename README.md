@@ -1,15 +1,18 @@
 ```py
   SONG SENTIMENT COMPARER
-   
-  input any song to analyse the sentiment of its lyrics
+  chose any song & analyse the sentiment of its lyrics
   
-  to use
-  - clone repo (cd to src/main)
-  - py main.py
+  USE
+  download latest release
+  "https://github.com/TrvsF/song-sentiment-comparer/releases"
   
-  features
-  - gui
-  - fine-tuned sequence classifer LM
+    pip3 install -r requirements.txt
+    py main.py
+  
+  FEATURES
+  gui
+  fine-tuned sequence classifer language model
    
-  model used: "https://huggingface.co/trvsf/ssc"
+  MODEL
+  "https://huggingface.co/trvsf/ssc"
 ```
