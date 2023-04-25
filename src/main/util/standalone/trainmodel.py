@@ -12,7 +12,7 @@ sentiment_data        = sentiment_dataset_obj["train"].train_test_split(test_siz
 sentiment_train = sentiment_data["train"].shuffle(seed=42)
 sentiment_test  = sentiment_data["test"].shuffle(seed=42)
 train_len = len(sentiment_train)
-test_len = len(sentiment_test)
+test_len  = len(sentiment_test)
 
 print(f"processing with sizes [{train_len}:{test_len}]")
 
