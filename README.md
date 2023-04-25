@@ -7,7 +7,7 @@
   "https://github.com/TrvsF/song-sentiment-comparer/releases"
   
     pip3 install -r requirements.txt
-    py main.py
+    py ssc.py
   
   FEATURES
   gui
