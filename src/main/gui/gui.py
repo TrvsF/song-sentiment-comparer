@@ -136,7 +136,7 @@ class Gui(tk.Tk):
         lyrics = self.genius_api.get_lyrics_from_song(songtitle=title, artistname=artist)
         # retry if timed out
         if lyrics == "":
-            self.search(searchtext, trycount + 1)
+            self.search(event, searchtext, trycount + 1)
         # cleanup, & output as label
         CleanLyrics = reutil.CleanLyrics(lyrics)
         sentiment_txt = GetSentiment(CleanLyrics, True)
