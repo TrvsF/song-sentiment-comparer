@@ -1,31 +1,32 @@
 from transformers import AutoTokenizer, TrainingArguments, Trainer, DataCollatorWithPadding, AutoModelForSequenceClassification
 from datasets import load_dataset, load_metric
-# from pandas import DataFrame
 
 import numpy as np
 
+# define tokenizer
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-
+# set sentiment data object with 1:5 train/test split
 sentiment_dataset_obj = load_dataset("csv", data_files="data/sentiment.csv")
 sentiment_data        = sentiment_dataset_obj["train"].train_test_split(test_size=0.2)
-
+# shuffle lyrics and assign to train/test var 
 sentiment_train = sentiment_data["train"].shuffle(seed=42)
 sentiment_test  = sentiment_data["test"].shuffle(seed=42)
 train_len = len(sentiment_train)
 test_len  = len(sentiment_test)
-
 print(f"processing with sizes [{train_len}:{test_len}]")
 
+# tokenizer function
 def preprocess_function(examples):
    return tokenizer(examples["text"], truncation=True)
-
+# tokenize lyric data
 tokenized_train = sentiment_train.map(preprocess_function, batched=True)
 tokenized_test  = sentiment_test.map(preprocess_function, batched=True)
-
+# setup data collector
 data_collector = DataCollatorWithPadding(tokenizer=tokenizer)
-
+# create sequence classification model
 model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=2)
 
+# method to eval model
 def compute_metrics(eval_pred):
    load_accuracy = load_metric("accuracy")
    load_f1 = load_metric("f1")
